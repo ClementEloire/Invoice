@@ -76,9 +76,34 @@ public class DAO {
 	 * taille
 	 * @throws java.lang.Exception si la transaction a échoué
 	 */
-	public void createInvoice(CustomerEntity customer, int[] productIDs, int[] quantities)
-		throws Exception {
-		throw new UnsupportedOperationException("Pas encore implémenté");
+	public void createInvoice(CustomerEntity customer, int[] productIDs, int[] quantities) throws Exception {
+            int idClient = customer.getCustomerId();
+            int idFacture = 0;
+            String sql = "INSERT INTO Invoice (?,0.0f)";
+            String sql2 = "INSERT INTO Item (?,?,?,?)";
+            String sql3 = "SELECT Max(Id) FROM Invoice";
+            String sql4 = "SELECT Price FROM Product WHERE ID = ?";
+            try (Connection connection = myDataSource.getConnection();){
+			PreparedStatement stmt = connection.prepareStatement(sql) ;
+                        PreparedStatement stmt2 = connection.prepareStatement(sql2);
+                        PreparedStatement stmt3 = connection.prepareStatement(sql3);
+                        PreparedStatement stmt4 = connection.prepareStatement(sql4);
+			try(ResultSet rs = stmt3.executeQuery(sql3)){
+                            idFacture = rs.getInt(sql3);
+                        }
+                        stmt.setInt(1, idClient);
+                        if (productIDs.length == quantities.length){
+                            for (int i = 0; i <= productIDs.length; i++){
+                                stmt2.setInt(1, idFacture);
+                                stmt2.setInt(2, i);
+                                stmt2.setInt(3, quantities[i]);
+                                stmt4.setInt(1, productIDs[i]);
+                                try(ResultSet rs2 = stmt3.executeQuery()){
+                                    state.setInt(4,quantities[i]*resultSet.get)
+                                }
+                            }
+                        }
+		}
 	}
 
 	/**

@@ -94,8 +94,20 @@ public class TransactionTest {
 		assertEquals(before + 2f * 10f, after, 0.001f);		
 	}
 	
-
-	
+        // On véréfie qu'aucun Item n'a été crée si l'id d'un produit n'ets pas connnu
+        @Test(expected = Exception.class)
+        public void verifierIdPorduit() throws Exception{
+            int[] productIDs = new int[]{-1};
+            int[] quantities = new int[]{10};
+            myDAO.createInvoice(myCustomer, productIDs, quantities);
+        }
+        // On véréfie qu'aucun Item n'a été crée si la quantité du produit acheté est négative
+	@Test(expected = Exception.class)
+        public void verifierQuantiteProduit() throws Exception{
+            int[] productIDs = new int[]{1};
+            int[] quantities = new int[]{-10};
+            myDAO.createInvoice(myCustomer, productIDs, quantities);
+        }
 	public static DataSource getDataSource() throws SQLException {
 		org.hsqldb.jdbc.JDBCDataSource ds = new org.hsqldb.jdbc.JDBCDataSource();
 		ds.setDatabase("jdbc:hsqldb:mem:testcase;shutdown=true");
